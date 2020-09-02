@@ -17,6 +17,7 @@
  */
 package org.apache.ratis.netty;
 
+import org.apache.ratis.inst.FailureController;
 import org.apache.ratis.protocol.RaftPeer;
 import org.apache.ratis.thirdparty.io.netty.channel.*;
 import org.apache.ratis.thirdparty.io.netty.channel.nio.NioEventLoopGroup;
@@ -99,6 +100,9 @@ public class NettyRpcProxy implements Closeable {
         @Override
         protected void channelRead0(ChannelHandlerContext ctx,
                                     RaftNettyServerReplyProto proto) {
+
+          if(FailureController.isBlocked(proto)) return; // For fault-tolerance tests
+
           final CompletableFuture<RaftNettyServerReplyProto> future = pollReply();
           if (future == null) {
             throw new IllegalStateException("Request #" + getCallId(proto)

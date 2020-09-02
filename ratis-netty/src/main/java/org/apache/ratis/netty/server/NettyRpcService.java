@@ -18,6 +18,7 @@
 package org.apache.ratis.netty.server;
 
 import org.apache.ratis.client.impl.ClientProtoUtils;
+import org.apache.ratis.inst.FailureController;
 import org.apache.ratis.netty.NettyConfigKeys;
 import org.apache.ratis.netty.NettyRpcProxy;
 import org.apache.ratis.protocol.GroupInfoReply;
@@ -89,6 +90,9 @@ public final class NettyRpcService extends RaftServerRpcWithProxy<NettyRpcProxy,
   class InboundHandler extends SimpleChannelInboundHandler<RaftNettyServerRequestProto> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RaftNettyServerRequestProto proto) {
+
+      if(FailureController.isBlocked(proto)) return; // For fault-tolerance tests
+
       final RaftNettyServerReplyProto reply = handle(proto);
       ctx.writeAndFlush(reply);
     }

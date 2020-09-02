@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>ratis</artifactId>
+        <groupId>org.apache.ratis</groupId>
+        <version>0.6.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ratis-failure-test</artifactId>
+    <name>Apache Ratis Test for Link Failures</name>
+
+    <dependencies>
+        <dependency>
+            <artifactId>ratis-test</artifactId>
+            <groupId>org.apache.ratis</groupId>
+            <scope>compile</scope>
+            <type>test-jar</type>
+        </dependency>
+
+        <dependency>
+            <artifactId>ratis-common</artifactId>
+            <groupId>org.apache.ratis</groupId>
+            <scope>compile</scope>
+            <type>test-jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ratis</groupId>
+            <artifactId>ratis-failure-inst</artifactId>
+        </dependency>
+
+        <dependency>
+            <artifactId>ratis-client</artifactId>
+            <groupId>org.apache.ratis</groupId>
+        </dependency>
+
+        <dependency>
+            <artifactId>ratis-server</artifactId>
+            <groupId>org.apache.ratis</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>ratis-server</artifactId>
+            <groupId>org.apache.ratis</groupId>
+            <scope>compile</scope>
+            <type>test-jar</type>
+        </dependency>
+
+        <dependency>
+            <artifactId>ratis-netty</artifactId>
+            <groupId>org.apache.ratis</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>ratis-netty</artifactId>
+            <groupId>org.apache.ratis</groupId>
+            <scope>compile</scope>
+            <type>test-jar</type>
+        </dependency>
+
+        <dependency>
+            <artifactId>ratis-grpc</artifactId>
+            <groupId>org.apache.ratis</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>ratis-grpc</artifactId>
+            <groupId>org.apache.ratis</groupId>
+            <scope>compile</scope>
+            <type>test-jar</type>
+        </dependency>
+
+        <dependency>
+            <artifactId>ratis-logservice</artifactId>
+            <groupId>org.apache.ratis</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>ratis-logservice</artifactId>
+            <groupId>org.apache.ratis</groupId>
+            <type>test-jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skipAssembly>false</skipAssembly>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.apache.ratis.failureTests.TestMain</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

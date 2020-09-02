@@ -19,6 +19,7 @@ package org.apache.ratis.grpc.server;
 
 import org.apache.ratis.grpc.GrpcUtil;
 import org.apache.ratis.protocol.RaftPeerId;
+import org.apache.ratis.inst.FailureController;
 import org.apache.ratis.server.RaftServer;
 import org.apache.ratis.server.impl.ServerProtoUtils;
 import org.apache.ratis.server.protocol.RaftServerProtocol;
@@ -163,7 +164,13 @@ class GrpcServerProtocolService extends RaftServerProtocolServiceImplBase {
   public void requestVote(RequestVoteRequestProto request,
       StreamObserver<RequestVoteReplyProto> responseObserver) {
     try {
+
+      if(FailureController.isBlocked(request)) return; // For fault-tolerance tests
+
       final RequestVoteReplyProto reply = server.requestVote(request);
+
+      if(FailureController.isBlocked(reply)) return; // For fault-tolerance tests
+
       responseObserver.onNext(reply);
       responseObserver.onCompleted();
     } catch (Throwable e) {

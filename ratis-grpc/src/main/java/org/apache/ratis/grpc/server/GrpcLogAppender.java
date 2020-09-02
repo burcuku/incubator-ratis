@@ -20,6 +20,7 @@ package org.apache.ratis.grpc.server;
 import org.apache.ratis.grpc.GrpcConfigKeys;
 import org.apache.ratis.grpc.GrpcUtil;
 import org.apache.ratis.grpc.metrics.GrpcServerMetrics;
+import org.apache.ratis.inst.FailureController;
 import org.apache.ratis.protocol.RaftPeerId;
 import org.apache.ratis.server.RaftServerConfigKeys;
 import org.apache.ratis.server.impl.FollowerInfo;
@@ -200,6 +201,9 @@ public class GrpcLogAppender extends LogAppender {
     CodeInjectionForTesting.execute(GrpcService.GRPC_SEND_SERVER_REQUEST,
         server.getId(), null, proto);
     request.startRequestTimer();
+
+    if(FailureController.isBlocked(proto)) return; // For fault-tolerance tests
+
     s.onNext(proto);
     scheduler.onTimeout(requestTimeoutDuration,
         () -> timeoutAppendRequest(request.getCallId(), request.isHeartbeat()),
@@ -238,6 +242,9 @@ public class GrpcLogAppender extends LogAppender {
      */
     @Override
     public void onNext(AppendEntriesReplyProto reply) {
+
+      if(FailureController.isBlocked(reply)) return; // For fault-tolerance tests
+
       AppendEntriesRequest request = pendingRequests.remove(reply);
       if (request != null) {
         request.stopRequestTimer(); // Update completion time

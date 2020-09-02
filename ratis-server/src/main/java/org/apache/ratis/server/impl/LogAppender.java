@@ -420,7 +420,8 @@ public class LogAppender {
     } catch (InterruptedIOException iioe) {
       throw iioe;
     } catch (Exception ioe) {
-      LOG.warn("{}: Failed to installSnapshot {}: {}", this, snapshot, ioe);
+      //LOG.warn("{}: Failed to installSnapshot {}: {}", this, snapshot, ioe);
+      LOG.warn("{}: Failed to installSnapshot {}: {}", this, snapshot, ioe.getMessage()); // For fault-tolerance tests - shortened log
       handleException(ioe);
       return null;
     }
